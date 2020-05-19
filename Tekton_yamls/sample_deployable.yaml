@@ -1,0 +1,21 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: motd-deployment
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: motd
+      name: motd
+    spec:
+      containers:
+      - image: index.docker.io/johnowebb/motd:9970319
+        imagePullPolicy: Always
+        livenessProbe:
+          initialDelaySeconds: 20
+          periodSeconds: 60
+          tcpSocket:
+            port: 8000
+        name: motd

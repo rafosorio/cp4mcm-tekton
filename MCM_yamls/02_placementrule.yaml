@@ -1,0 +1,13 @@
+apiVersion: app.ibm.com/v1alpha1
+kind: PlacementRule
+metadata:
+  name: motd-placementrule
+  namespace: motd-mcm-resources
+  generation: 1
+  labels:
+    purpose: motd
+spec:
+  clusterReplicas: 1
+  clusterLabels:
+    matchLabels:
+      cluster: motd

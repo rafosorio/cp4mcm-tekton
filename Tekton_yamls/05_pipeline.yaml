@@ -1,0 +1,43 @@
+apiVersion: tekton.dev/v1alpha1
+kind: Pipeline
+metadata:
+  name: build-and-deploy-pipeline-motd
+spec:
+  resources:
+    - name: git-source-motd
+      type: git
+    - name: docker-image-motd
+      type: image
+  params:
+    - name: pathToYamlFile
+      description: The path to the yaml file to deploy within the git source
+      default: "k8s_yamls"
+    - name: pathToDeployablesFile
+      description: The path to the deployable file to deploy within the git source
+      default: "k8s_yamls_mcm"
+  tasks:
+  - name: build-task
+    resources:
+      inputs:
+        - name: git-source-motd
+          resource: git-source-motd
+        - name: docker-image-motd
+          resource: docker-image-motd
+    taskRef:
+      name: motd-build-task
+  - name: deploy-task
+    params:
+      - name: pathToYamlFile
+        value:  "$(params.pathToYamlFile)"
+      - name: pathToDeployablesFile
+        value:  "$(params.pathToDeployablesFile)"
+    resources:
+      inputs:
+        - name: git-source-motd
+          resource: git-source-motd
+        - name: docker-image-motd
+          resource: docker-image-motd
+    runAfter:
+      - build-task
+    taskRef:
+      name: motd-deploy-task

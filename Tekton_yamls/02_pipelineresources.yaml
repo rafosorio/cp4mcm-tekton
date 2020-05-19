@@ -1,0 +1,19 @@
+  apiVersion: tekton.dev/v1alpha1
+  kind: PipelineResource
+  metadata:
+    name: docker-image-motd
+  spec:
+    params:
+    - name: url
+      value: index.docker.io/johnowebb/motd
+    type: image
+---
+  apiVersion: tekton.dev/v1alpha1
+  kind: PipelineResource
+  metadata:
+    name: git-source-motd
+  spec:
+    params:
+    - name: url
+      value: https://github.com/jdiggity22/motherload
+    type: git

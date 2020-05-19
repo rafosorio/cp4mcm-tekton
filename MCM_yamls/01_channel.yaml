@@ -1,0 +1,13 @@
+apiVersion: app.ibm.com/v1alpha1
+kind: Channel
+metadata:
+  name: motd-channel
+  namespace: motd-tekton
+spec:
+  sourceNamespaces:
+  - default
+  type: Namespace
+  pathname: motd-tekton
+  gates:
+    annotations:
+      dev-ready: approved
