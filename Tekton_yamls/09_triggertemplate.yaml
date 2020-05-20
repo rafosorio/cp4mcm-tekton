@@ -1,0 +1,31 @@
+apiVersion: triggers.tekton.dev/v1alpha1
+kind: TriggerTemplate
+# This requires the simple pipeline tasks from the pipeline hotel to be installed first
+# and the simple pipeline, and the conditional resource
+metadata:
+  name: build-and-deploy-pipeline-motd-template
+  namespace: openshift-pipelines
+spec:
+  resourcetemplates:
+  - apiVersion: tekton.dev/v1alpha1
+    kind: PipelineRun
+    metadata:
+      generateName: motd-pr-
+      namespace: motd-tekton
+    spec:
+      pipelineRef:
+        name: build-and-deploy-pipeline-motd
+      resources:
+        - name: git-source-motd
+          resourceRef:
+            name: git-source-motd
+        - name: docker-image-motd
+          resourceRef:
+            name: docker-image-motd
+      params:
+        - name: pathToYamlFile
+          value: "k8s_yamls"
+        - name: pathToDeployablesFile
+          value: "k8s_yamls_mcm"
+      serviceAccountName: pipeline-account
+      timeout: "1h0m0s"
