@@ -40,6 +40,6 @@ kubectl get route tekton-dashboard -n openshift-pipelines
 Create Personal Access Token
 
 ```
-enable admin: repo_hook
+enable repo and admin: repo_hook permissions
 
 ```
