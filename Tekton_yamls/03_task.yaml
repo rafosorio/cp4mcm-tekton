@@ -87,3 +87,17 @@ spec:
         - "apply"
         - "-f"
         - "/workspace/git-source-motd/$(inputs.params.pathToDeployablesFile)/deployable.yaml"
+  - name: deploy-service
+    image: lachlanevenson/k8s-kubectl
+    command: ["kubectl"]
+    args:
+        - "apply"
+        - "-f"
+        - "/workspace/git-source-motd/$(inputs.params.pathToDeployablesFile)/service.yaml"
+  - name: deploy-route
+    image: lachlanevenson/k8s-kubectl
+    command: ["kubectl"]
+    args:
+        - "apply"
+        - "-f"
+        - "/workspace/git-source-motd/$(inputs.params.pathToDeployablesFile)/route.yaml"

@@ -7,7 +7,6 @@ metadata:
     purpose: motd
 spec:
   channel: motd-tekton/motd-channel
-  name: motd-deploy
   placement:
     placementRef:
       name: motd-placementrule

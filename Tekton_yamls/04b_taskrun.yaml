@@ -1,0 +1,21 @@
+apiVersion: tekton.dev/v1alpha1
+kind: TaskRun
+metadata:
+  name: motd-deploy-taskrun
+spec:
+  serviceAccountName: pipeline-account
+  taskRef:
+    name: motd-deploy-task
+  inputs:
+    resources:
+      - name: git-source-motd
+        resourceRef:
+          name: git-source-motd
+      - name: docker-image-motd
+        resourceRef:
+            name: docker-image-motd
+    params:
+    - name: pathToYamlFile
+      value: "k8s_yamls"
+    - name: pathToDeployablesFile
+      value: "k8s_yamls_mcm"
