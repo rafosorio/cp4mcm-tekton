@@ -1,7 +1,7 @@
 apiVersion: triggers.tekton.dev/v1alpha1
 kind: TriggerBinding
 metadata:
-  name: build-and-deploy-pipeline-motd-pullrequest-binding
+  name: build-and-deploy-pipeline-tradr-pullrequest-binding
   namespace: openshift-pipelines
 spec:
   params:

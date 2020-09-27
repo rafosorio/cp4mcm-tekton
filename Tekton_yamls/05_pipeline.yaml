@@ -1,12 +1,12 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Pipeline
 metadata:
-  name: build-and-deploy-pipeline-motd
+  name: build-and-deploy-pipeline-tradr
 spec:
   resources:
-    - name: git-source-motd
+    - name: git-source-tradr
       type: git
-    - name: docker-image-motd
+    - name: docker-image-tradr
       type: image
   params:
     - name: pathToYamlFile
@@ -19,12 +19,12 @@ spec:
   - name: build-task
     resources:
       inputs:
-        - name: git-source-motd
-          resource: git-source-motd
-        - name: docker-image-motd
-          resource: docker-image-motd
+        - name: git-source-tradr
+          resource: git-source-tradr
+        - name: docker-image-tradr
+          resource: docker-image-tradr
     taskRef:
-      name: motd-build-task
+      name: tradr-build-task
   - name: deploy-task
     params:
       - name: pathToYamlFile
@@ -33,11 +33,11 @@ spec:
         value:  "$(params.pathToDeployablesFile)"
     resources:
       inputs:
-        - name: git-source-motd
-          resource: git-source-motd
-        - name: docker-image-motd
-          resource: docker-image-motd
+        - name: git-source-tradr
+          resource: git-source-tradr
+        - name: docker-image-tradr
+          resource: docker-image-tradr
     runAfter:
       - build-task
     taskRef:
-      name: motd-deploy-task
+      name: tradr-deploy-task

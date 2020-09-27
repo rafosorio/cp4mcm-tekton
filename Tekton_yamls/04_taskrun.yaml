@@ -1,19 +1,19 @@
 apiVersion: tekton.dev/v1alpha1
 kind: TaskRun
 metadata:
-  name: motd-build-taskrun
+  name: tradr-build-taskrun
 spec:
   serviceAccountName: pipeline-account
   taskRef:
-    name: motd-build-task
+    name: tradr-build-task
   inputs:
     resources:
-      - name: git-source-motd
+      - name: git-source-tradr
         resourceRef:
-          name: git-source-motd
-      - name: docker-image-motd
+          name: git-source-tradr
+      - name: docker-image-tradr
         resourceRef:
-            name: docker-image-motd
+            name: docker-image-tradr
     params:
     - name: BUILDER_IMAGE
       value: "quay.io/buildah/stable:v1.12.0"

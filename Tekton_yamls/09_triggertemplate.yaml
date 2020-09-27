@@ -3,25 +3,25 @@ kind: TriggerTemplate
 # This requires the simple pipeline tasks from the pipeline hotel to be installed first
 # and the simple pipeline, and the conditional resource
 metadata:
-  name: build-and-deploy-pipeline-motd-template
+  name: build-and-deploy-pipeline-tradr-template
   namespace: openshift-pipelines
 spec:
   resourcetemplates:
   - apiVersion: tekton.dev/v1alpha1
     kind: PipelineRun
     metadata:
-      generateName: motd-pr-
-      namespace: motd-tekton
+      generateName: tradr-pr-
+      namespace: labx-tekton
     spec:
       pipelineRef:
-        name: build-and-deploy-pipeline-motd
+        name: build-and-deploy-pipeline-tradr
       resources:
-        - name: git-source-motd
+        - name: git-source-tradr
           resourceRef:
-            name: git-source-motd
-        - name: docker-image-motd
+            name: git-source-tradr
+        - name: docker-image-tradr
           resourceRef:
-            name: docker-image-motd
+            name: docker-image-tradr
       params:
         - name: pathToYamlFile
           value: "k8s_yamls"

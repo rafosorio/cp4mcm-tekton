@@ -1,19 +1,19 @@
   apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
-    name: docker-image-motd
+    name: docker-image-tradr
   spec:
     params:
     - name: url
-      value: index.docker.io/johnowebb/motd
+      value: index.docker.io/your_docker_hub_user/tradr
     type: image
 ---
   apiVersion: tekton.dev/v1alpha1
   kind: PipelineResource
   metadata:
-    name: git-source-motd
+    name: git-source-tradr
   spec:
     params:
     - name: url
-      value: https://github.com/jdiggity22/motherload
+      value: https://github.com/your_public_github_user/motherload
     type: git

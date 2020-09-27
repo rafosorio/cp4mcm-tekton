@@ -1,18 +1,18 @@
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: motd-build-task
+  name: tradr-build-task
 spec:
   inputs:
     resources:
-    - name: git-source-motd
+    - name: git-source-tradr
       type: git
-    - name: docker-image-motd
+    - name: docker-image-tradr
       type: image
     params:
       - name: BUILDER_IMAGE
         description: The location of the buildah builder image.
-        default: "quay.io/buildah/stable:v1.12.0"
+        default: "quay.io/buildah/stable:v1.15.0"
       - name: DOCKERFILE
         description: Path to the Dockerfile to build.
         default: ./Dockerfile
@@ -25,17 +25,17 @@ spec:
   steps:
   - name: build-push
     image: $(inputs.params.BUILDER_IMAGE)
-    workingDir: /workspace/git-source-motd
+    workingDir: /workspace/git-source-tradr
     command: ["/bin/bash"]
     args:
       - -c
       - |
         set -e
         SHORT_GIT_HASH="$(cat .git/FETCH_HEAD | awk '{print substr($1,0,7)}')"
-        NEW_IMAGE_ID="$(inputs.resources.docker-image-motd.url):$SHORT_GIT_HASH"
+        NEW_IMAGE_ID="$(inputs.resources.docker-image-tradr.url):$SHORT_GIT_HASH"
         echo "SHORT_GIT_HASH = $SHORT_GIT_HASH"
         echo "Building Image $NEW_IMAGE_ID"
-        buildah bud --tls-verify="$(inputs.params.TLSVERIFY)" --storage-driver=vfs -t "$NEW_IMAGE_ID" "$(inputs.params.CONTEXT)"
+        buildah bud --tls-verify="$(inputs.params.TLSVERIFY)" --format docker --storage-driver=vfs -t "$NEW_IMAGE_ID" "$(inputs.params.CONTEXT)"
         echo "Listing images."
         buildah images --storage-driver=vfs
         echo "Pushing Image $NEW_IMAGE_ID"
@@ -53,13 +53,13 @@ spec:
 apiVersion: tekton.dev/v1alpha1
 kind: Task
 metadata:
-  name: motd-deploy-task
+  name: tradr-deploy-task
 spec:
   inputs:
     resources:
-      - name: git-source-motd
+      - name: git-source-tradr
         type: git
-      - name: docker-image-motd
+      - name: docker-image-tradr
         type: image
     params:
       - name: pathToYamlFile
@@ -69,35 +69,35 @@ spec:
   steps:
   - name: modify-app-deploy-yaml
     image: registry.access.redhat.com/ubi8/ubi:latest
-    workingDir: /workspace/git-source-motd
+    workingDir: /workspace/git-source-tradr
     command: ["/bin/bash"]
     args:
       - -c
       - |
         set -e
         SHORT_GIT_HASH="$(cat .git/FETCH_HEAD | awk '{print substr($1,0,7)}')"
-        NEW_IMAGE_ID="$(inputs.resources.docker-image-motd.url):$SHORT_GIT_HASH"
+        NEW_IMAGE_ID="$(inputs.resources.docker-image-tradr.url):$SHORT_GIT_HASH"
         echo "SHORT_GIT_HASH = $SHORT_GIT_HASH"
         echo "Using Image $NEW_IMAGE_ID"
-        sed -i -e 's|__IMAGE__|'"$NEW_IMAGE_ID"'|g' /workspace/git-source-motd/$(inputs.params.pathToDeployablesFile)/deployable.yaml
+        sed -i -e 's|__IMAGE__|'"$NEW_IMAGE_ID"'|g' /workspace/git-source-tradr/$(inputs.params.pathToDeployablesFile)/deployable.yaml
   - name: deploy-deployable
     image: lachlanevenson/k8s-kubectl
     command: ["kubectl"]
     args:
         - "apply"
         - "-f"
-        - "/workspace/git-source-motd/$(inputs.params.pathToDeployablesFile)/deployable.yaml"
+        - "/workspace/git-source-tradr/$(inputs.params.pathToDeployablesFile)/deployable.yaml"
   - name: deploy-service
     image: lachlanevenson/k8s-kubectl
     command: ["kubectl"]
     args:
         - "apply"
         - "-f"
-        - "/workspace/git-source-motd/$(inputs.params.pathToDeployablesFile)/service.yaml"
-  - name: deploy-route
+        - "/workspace/git-source-tradr/$(inputs.params.pathToDeployablesFile)/service.yaml"
+  - name: deploy-configmap
     image: lachlanevenson/k8s-kubectl
     command: ["kubectl"]
     args:
         - "apply"
         - "-f"
-        - "/workspace/git-source-motd/$(inputs.params.pathToDeployablesFile)/route.yaml"
+        - "/workspace/git-source-motd/$(inputs.params.pathToDeployablesFile)/configmap.yaml"
