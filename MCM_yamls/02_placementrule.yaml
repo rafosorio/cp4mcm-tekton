@@ -1,13 +1,14 @@
 apiVersion: app.ibm.com/v1alpha1
 kind: PlacementRule
 metadata:
-  name: motd-placementrule
-  namespace: motd-mcm-resources
+  name: labX-tradr-placementrule
+  namespace: labX-mcm-resources
   generation: 1
   labels:
-    purpose: motd
+    purpose: labX-tradr
 spec:
   clusterReplicas: 1
   clusterLabels:
     matchLabels:
-      cluster: motd
+      environment: dev
+      targetX: labX

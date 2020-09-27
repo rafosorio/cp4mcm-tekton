@@ -1,13 +1,13 @@
 apiVersion: app.ibm.com/v1alpha1
 kind: Channel
 metadata:
-  name: motd-channel
-  namespace: motd-tekton
+  name: labX-tradr-channel
+  namespace: labX-tekton
 spec:
   sourceNamespaces:
   - default
   type: Namespace
-  pathname: motd-tekton
+  pathname: labX-tekton
   gates:
     annotations:
       dev-ready: approved
