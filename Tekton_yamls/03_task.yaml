@@ -100,4 +100,4 @@ spec:
     args:
         - "apply"
         - "-f"
-        - "/workspace/git-source-motd/$(inputs.params.pathToDeployablesFile)/configmap.yaml"
+        - "/workspace/git-source-tradr/$(inputs.params.pathToDeployablesFile)/configmap.yaml"
