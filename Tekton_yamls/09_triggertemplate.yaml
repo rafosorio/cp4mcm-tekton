@@ -11,7 +11,7 @@ spec:
     kind: PipelineRun
     metadata:
       generateName: tradr-pr-
-      namespace: labx-tekton
+      namespace: labX-tekton
     spec:
       pipelineRef:
         name: build-and-deploy-pipeline-tradr
